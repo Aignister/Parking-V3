@@ -1,26 +1,19 @@
 import { useState, useEffect } from "react";
-import {
-  fetchDailyStats, fetchWeeklyStats, fetchMonthlyStats, fetchStatsSummary,
-} from "../../services/api";
-import {
-  BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
-  Tooltip, Legend, ResponsiveContainer,
-} from "recharts";
+import { fetchDailyStats, fetchWeeklyStats, fetchMonthlyStats, fetchStatsSummary } from "../../services/api";
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, } from "recharts";
 import { TrendingUp, Car, ArrowUpRight, ArrowDownRight } from "lucide-react";
 
-// ─── Colors per parking ───────────────────────────────────────
 const P_COLORS = { 1: "#111111", 2: "#2563eb", 3: "#dc2626" };
-const P_LIGHT  = { 1: "#f3f4f6", 2: "#dbeafe", 3: "#fee2e2" };
+const P_LIGHT = { 1: "#f3f4f6", 2: "#dbeafe", 3: "#fee2e2" };
 
-// ─── Mock generator ───────────────────────────────────────────
 function mockSummary() {
   return [1,2,3].map((id) => ({
     parking_id: id, parking_name: `Parking ${id}`,
-    total_spots:       56,
-    total_entries:     Math.floor(Math.random()*800)+200,
-    total_exits:       Math.floor(Math.random()*800)+200,
-    entries_today:     Math.floor(Math.random()*40)+5,
-    currently_occupied:Math.floor(Math.random()*35),
+    total_spots: 56,
+    total_entries: Math.floor(Math.random()*800)+200,
+    total_exits: Math.floor(Math.random()*800)+200,
+    entries_today: Math.floor(Math.random()*40)+5,
+    currently_occupied: Math.floor(Math.random()*35),
   }));
 }
 
@@ -33,7 +26,7 @@ function mockDaily(days=7) {
       parking_id:   pid, parking_name:`Parking ${pid}`,
       day,
       entries: Math.floor(Math.random()*60)+10,
-      exits:   Math.floor(Math.random()*60)+10,
+      exits: Math.floor(Math.random()*60)+10,
     }));
   }
   return rows;
@@ -48,7 +41,7 @@ function mockWeekly(weeks=4) {
       parking_id: pid, parking_name:`Parking ${pid}`,
       week_start,
       entries: Math.floor(Math.random()*300)+60,
-      exits:   Math.floor(Math.random()*300)+60,
+      exits: Math.floor(Math.random()*300)+60,
     }));
   }
   return rows;
@@ -64,19 +57,18 @@ function mockMonthly(months=6) {
       parking_id: pid, parking_name:`Parking ${pid}`,
       month_start,
       entries: Math.floor(Math.random()*1200)+300,
-      exits:   Math.floor(Math.random()*1200)+300,
+      exits: Math.floor(Math.random()*1200)+300,
     }));
   }
   return rows;
 }
 
-// ─── Pivot rows → chart-friendly format ───────────────────────
 function pivotRows(rows, dateKey) {
   const map = {};
   rows.forEach(({ [dateKey]: date, parking_id, entries, exits }) => {
     if (!map[date]) map[date] = { date };
     map[date][`p${parking_id}_entries`] = Number(entries);
-    map[date][`p${parking_id}_exits`]   = Number(exits);
+    map[date][`p${parking_id}_exits`] = Number(exits);
   });
   return Object.values(map).sort((a,b) => a.date.localeCompare(b.date));
 }
@@ -94,7 +86,6 @@ function fmtMonth(str) {
   return d.toLocaleDateString("es-MX", { month:"short", year:"2-digit" });
 }
 
-// Custom tooltip
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
@@ -111,8 +102,8 @@ function CustomTooltip({ active, payload, label }) {
   );
 }
 
-// Stat card 
-function StatCard({ title, value, sub, color, light, icon: Icon }) {
+function StatCard({ title, value, sub, color, light, icon }) {
+  const Icon = icon;
   return (
     <div
       className="rounded-xl border border-gray-100 bg-white p-5 flex items-start justify-between"
@@ -130,7 +121,6 @@ function StatCard({ title, value, sub, color, light, icon: Icon }) {
   );
 }
 
-// Section wrapper
 function Section({ title, subtitle, children }) {
   return (
     <div
@@ -147,15 +137,14 @@ function Section({ title, subtitle, children }) {
   );
 }
 
-// Main Component
 export default function Statistics() {
-  const [summary,  setSummary]  = useState([]);
-  const [daily,    setDaily]    = useState([]);
-  const [weekly,   setWeekly]   = useState([]);
-  const [monthly,  setMonthly]  = useState([]);
-  const [loading,  setLoading]  = useState(true);
-  const [useMock,  setUseMock]  = useState(false);
-  const [tab,      setTab]      = useState("daily");
+  const [summary, setSummary] = useState([]);
+  const [daily, setDaily] = useState([]);
+  const [weekly, setWeekly] = useState([]);
+  const [monthly, setMonthly] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [useMock, setUseMock] = useState(false);
+  const [tab, setTab] = useState("daily");
 
   useEffect(() => {
     async function load() {
@@ -177,22 +166,19 @@ export default function Statistics() {
     load();
   }, []);
 
-  // Which dataset / formatter to use
   const tabConfig = {
-    daily:   { rows: daily,   key: "day",         fmt: fmtDate,  label: "Últimos 7 días"   },
-    weekly:  { rows: weekly,  key: "week_start",  fmt: fmtWeek,  label: "Últimas 4 semanas" },
-    monthly: { rows: monthly, key: "month_start", fmt: fmtMonth, label: "Últimos 6 meses"   },
+    daily: { rows: daily, key: "day", fmt: fmtDate,  label: "Últimos 7 días" },
+    weekly: { rows: weekly, key: "week_start",  fmt: fmtWeek,  label: "Últimas 4 semanas" },
+    monthly: { rows: monthly, key: "month_start", fmt: fmtMonth, label: "Últimos 6 meses" },
   };
   const { rows, key, fmt, label } = tabConfig[tab];
   const chartData = pivotRows(rows, key).map((r) => ({ ...r, date: fmt(r.date) }));
 
-  // Totals from summary
   const totalEntries = summary.reduce((s,p) => s + Number(p.total_entries||0), 0);
   const todayEntries = summary.reduce((s,p) => s + Number(p.entries_today||0), 0);
-  const totalOccupied= summary.reduce((s,p) => s + Number(p.currently_occupied||0), 0);
-  const totalSpots   = summary.reduce((s,p) => s + Number(p.total_spots||0), 0);
+  const totalOccupied = summary.reduce((s,p) => s + Number(p.currently_occupied||0), 0);
+  const totalSpots = summary.reduce((s,p) => s + Number(p.total_spots||0), 0);
 
-  // Busiest parking
   const busiest = summary.reduce((best, p) =>
     Number(p.total_entries||0) > Number(best?.total_entries||0) ? p : best, null);
 
@@ -210,7 +196,6 @@ export default function Statistics() {
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
 
-      {/* Header */}
       <div>
         <h2 className="text-xl font-bold text-gray-900 tracking-tight">Estadísticas</h2>
         <p className="text-xs text-gray-400 uppercase tracking-widest mt-0.5">
@@ -220,11 +205,10 @@ export default function Statistics() {
 
       {useMock && (
         <div className="px-4 py-2.5 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-700 font-medium">
-          ⚠️ Backend no disponible — mostrando datos de demostración
+          Backend no disponible — mostrando datos de demostración
         </div>
       )}
 
-      {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
           title="Total entradas" value={totalEntries.toLocaleString()}
@@ -245,7 +229,6 @@ export default function Statistics() {
         />
       </div>
 
-      {/* Per-parking summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {summary.map((p) => {
           const occ = Number(p.currently_occupied||0);
@@ -270,9 +253,9 @@ export default function Statistics() {
               <div className="grid grid-cols-2 gap-3 text-center">
                 {[
                   { label:"Entradas totales", val: Number(p.total_entries||0).toLocaleString() },
-                  { label:"Salidas totales",  val: Number(p.total_exits||0).toLocaleString() },
-                  { label:"Entradas hoy",     val: p.entries_today },
-                  { label:"Espacios libres",  val: tot - occ },
+                  { label:"Salidas totales", val: Number(p.total_exits||0).toLocaleString() },
+                  { label:"Entradas hoy",val: p.entries_today },
+                  { label:"Espacios libres", val: tot - occ },
                 ].map(({ label: l, val }) => (
                   <div key={l} className="bg-gray-50 rounded-lg p-2">
                     <p className="text-[9px] uppercase tracking-widest text-gray-400">{l}</p>
@@ -280,7 +263,6 @@ export default function Statistics() {
                   </div>
                 ))}
               </div>
-              {/* mini bar */}
               <div className="mt-3 rounded-full overflow-hidden" style={{ height:3, background:"#f3f4f6" }}>
                 <div style={{ width:`${pct}%`, height:"100%", background:barColor, transition:"width 0.4s ease", borderRadius:9999 }} />
               </div>
@@ -289,9 +271,7 @@ export default function Statistics() {
         })}
       </div>
 
-      {/* Chart tabs */}
       <Section title="Comparativa de flujo" subtitle={label}>
-        {/* Tab switcher */}
         <div className="flex gap-2 mb-5">
           {[["daily","Diario"],["weekly","Semanal"],["monthly","Mensual"]].map(([v,lbl]) => (
             <button
@@ -304,7 +284,6 @@ export default function Statistics() {
           ))}
         </div>
 
-        {/* Entries chart */}
         <p className="text-[11px] uppercase tracking-widest text-gray-400 mb-3">Entradas por parking</p>
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={chartData} barGap={2} barCategoryGap="30%">
@@ -320,7 +299,6 @@ export default function Statistics() {
           </BarChart>
         </ResponsiveContainer>
 
-        {/* Exits trend */}
         <p className="text-[11px] uppercase tracking-widest text-gray-400 mb-3 mt-6">Tendencia de salidas</p>
         <ResponsiveContainer width="100%" height={200}>
           <LineChart data={chartData}>

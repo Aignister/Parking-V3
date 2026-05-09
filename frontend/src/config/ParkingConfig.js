@@ -4,7 +4,6 @@ export const SPOT_TYPES = {
   vip: { label: "Preferencial", color: "#111111" },
 };
 
-// Helper to generate zones for a parking
 function makeZones(zoneLetters, descriptions, disabledRows = [0]) {
   return zoneLetters.map((letter, idx) => ({
     id: letter,
@@ -18,11 +17,10 @@ function makeZones(zoneLetters, descriptions, disabledRows = [0]) {
   }));
 }
 
-// Parking 1
 export const PARKING_1_CONFIG = {
   id: 1,
   title:    "Parking 1",
-  subtitle: "Estacionamiento Principal · Planta Baja",
+  subtitle: "Estacionamiento Principal",
   zones: makeZones(
     ["A", "B", "C", "D"],
     ["Acceso Principal", "Pasillo Sur", "Ala Izquierda", "Ala Derecha"],
@@ -30,11 +28,10 @@ export const PARKING_1_CONFIG = {
   ),
 };
 
-// Parking 2
 export const PARKING_2_CONFIG = {
   id: 2,
-  title:    "Parking 2",
-  subtitle: "Estacionamiento Norte · Nivel 1",
+  title: "Parking 2",
+  subtitle: "Estacionamiento Norte",
   zones: makeZones(
     ["E", "F", "G", "H"],
     ["Entrada Norte", "Pasillo Central", "Ala Este", "Ala Oeste"],
@@ -42,11 +39,10 @@ export const PARKING_2_CONFIG = {
   ),
 };
 
-// Parking 3
 export const PARKING_3_CONFIG = {
   id: 3,
-  title:    "Parking 3",
-  subtitle: "Estacionamiento Sur · Nivel 2",
+  title: "Parking 3",
+  subtitle: "Estacionamiento Sur",
   zones: makeZones(
     ["I", "J", "K", "L"],
     ["Entrada Sur", "Pasillo Norte", "Ala Este", "Ala Oeste"],
@@ -56,5 +52,4 @@ export const PARKING_3_CONFIG = {
 
 export const ALL_PARKINGS = [PARKING_1_CONFIG, PARKING_2_CONFIG, PARKING_3_CONFIG];
 
-// Legacy export for backward compat
 export const PARKING_CONFIG = PARKING_1_CONFIG;

@@ -9,7 +9,6 @@ export default function Header({ onMenuClick, stats }) {
     <header className="fixed top-0 left-0 right-0 z-20 h-16 bg-white border-b border-gray-100">
       <div className="h-full flex items-center justify-between px-4 sm:px-6 max-w-screen-2xl mx-auto">
 
-        {/* Left */}
         <div className="flex items-center gap-4">
           <button
             onClick={onMenuClick}
@@ -26,7 +25,6 @@ export default function Header({ onMenuClick, stats }) {
           </div>
         </div>
 
-        {/* Right */}
         <div className="flex items-center gap-3 sm:gap-4">
 
           <div className="hidden md:flex items-center gap-1.5 text-[12px] font-medium text-gray-500">

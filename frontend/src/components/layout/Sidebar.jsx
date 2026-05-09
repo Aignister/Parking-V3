@@ -13,7 +13,6 @@ export default function Sidebar({ isOpen, onClose, activeItem, onItemChange }) {
 
   return (
     <>
-      {/* Overlay */}
       <div
         onClick={onClose}
         className={`fixed inset-0 z-30 bg-black/40 backdrop-blur-[2px] transition-opacity duration-300 ${
@@ -21,14 +20,12 @@ export default function Sidebar({ isOpen, onClose, activeItem, onItemChange }) {
         }`}
       />
 
-      {/* Panel */}
       <aside
         className={`fixed top-0 left-0 h-full w-72 z-40 bg-[#0f0f0f] flex flex-col transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 h-16 border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-6 h-16 border-b border-white/6">
           <div className="flex items-center gap-2.5">
             <span className="text-white font-semibold text-[15px] tracking-tight">Parking</span>
           </div>
@@ -41,7 +38,6 @@ export default function Sidebar({ isOpen, onClose, activeItem, onItemChange }) {
           </button>
         </div>
 
-        {/* Nav grouped */}
         <nav className="flex-1 px-3 pt-4 overflow-y-auto">
           {groups.map((group) => (
             <div key={group} className="mb-4">
@@ -64,7 +60,7 @@ export default function Sidebar({ isOpen, onClose, activeItem, onItemChange }) {
                         }`}
                       >
                         <span
-                          className={`flex-shrink-0 transition-colors ${
+                          className={`shrink-0 transition-colors ${
                             isActive
                               ? "text-[#0f0f0f]"
                               : "text-white/40 group-hover:text-white/70"
@@ -87,8 +83,7 @@ export default function Sidebar({ isOpen, onClose, activeItem, onItemChange }) {
           ))}
         </nav>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-white/[0.06]">
+        <div className="px-6 py-4 border-t border-white/6">
           <p className="text-[10px] text-white/20 tracking-widest uppercase">
             Campus Universitario · v2.0
           </p>

@@ -1,7 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { logAccess } from "../services/api";
 
-// Initial occupied spots per parking (offline fallback / seed)
 const INITIAL_OCCUPIED = {
   1: new Set(["A02","A04","A06","A08","A13","B03","B05","C02","C04","D01","D03","D05","D07"]),
   2: new Set(["E01","E05","F02","F06","G03","H04","H07"]),
@@ -20,9 +19,9 @@ export function useParkingState(parkingConfig) {
     [parkingConfig]
   );
 
-  const totalSpots    = allSpots.length;
+  const totalSpots = allSpots.length;
   const occupiedCount = occupiedSpots.size;
-  const freeCount     = totalSpots - occupiedCount;
+  const freeCount = totalSpots - occupiedCount;
   const disabledCount = allSpots.filter((s) => s.type === "disabled").length;
 
   const isOccupied = useCallback(
@@ -33,11 +32,10 @@ export function useParkingState(parkingConfig) {
   const toggleSpot = useCallback(
     (spotId) => {
       setOccupiedSpots((prev) => {
-        const next   = new Set(prev);
+        const next = new Set(prev);
         const action = next.has(spotId) ? "exit" : "entry";
         action === "exit" ? next.delete(spotId) : next.add(spotId);
 
-        // Fire-and-forget to backend
         logAccess(parkingId, spotId, action).catch(console.warn);
 
         return next;

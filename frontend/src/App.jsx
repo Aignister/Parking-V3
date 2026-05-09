@@ -7,33 +7,29 @@ import Statistics from "./components/pages/Statistics";
 import { useParkingState } from "./hooks/UseParkingState";
 import { PARKING_1_CONFIG, PARKING_2_CONFIG, PARKING_3_CONFIG } from "./config/parkingConfig";
 
-// Map each sidebar key to its parking config
 const PARKING_CONFIGS = {
   mapa1: PARKING_1_CONFIG,
   mapa2: PARKING_2_CONFIG,
   mapa3: PARKING_3_CONFIG,
 };
 
-// Aggregate stats hook for header
-function useAllParkingStats() {
-  const s1 = useParkingState(PARKING_1_CONFIG).stats;
-  const s2 = useParkingState(PARKING_2_CONFIG).stats;
-  const s3 = useParkingState(PARKING_3_CONFIG).stats;
-  return {
-    totalSpots:    s1.totalSpots    + s2.totalSpots    + s3.totalSpots,
-    occupiedCount: s1.occupiedCount + s2.occupiedCount + s3.occupiedCount,
-    freeCount:     s1.freeCount     + s2.freeCount     + s3.freeCount,
-    disabledCount: s1.disabledCount + s2.disabledCount + s3.disabledCount,
-  };
-}
-
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeItem,  setActiveItem]  = useState("mapa1");
 
-  const stats = useAllParkingStats();
+  const p1 = useParkingState(PARKING_1_CONFIG);
+  const p2 = useParkingState(PARKING_2_CONFIG);
+  const p3 = useParkingState(PARKING_3_CONFIG);
 
-  // Esc closes sidebar
+  const PARKING_STATES = { mapa1: p1, mapa2: p2, mapa3: p3 };
+
+  const stats = {
+    totalSpots: p1.stats.totalSpots + p2.stats.totalSpots + p3.stats.totalSpots,
+    occupiedCount: p1.stats.occupiedCount + p2.stats.occupiedCount + p3.stats.occupiedCount,
+    freeCount: p1.stats.freeCount + p2.stats.freeCount + p3.stats.freeCount,
+    disabledCount: p1.stats.disabledCount + p2.stats.disabledCount + p3.stats.disabledCount,
+  };
+
   useEffect(() => {
     const handleKey = (e) => { if (e.key === "Escape") setSidebarOpen(false); };
     document.addEventListener("keydown", handleKey);
@@ -47,12 +43,19 @@ export default function App() {
 
   const renderContent = () => {
     if (PARKING_CONFIGS[activeItem]) {
-      return <ParkingMap parkingConfig={PARKING_CONFIGS[activeItem]} />;
+      const { isOccupied, toggleSpot } = PARKING_STATES[activeItem];
+      return (
+        <ParkingMap
+          parkingConfig={PARKING_CONFIGS[activeItem]}
+          isOccupied={isOccupied}
+          toggleSpot={toggleSpot}
+        />
+      );
     }
     switch (activeItem) {
-      case "registro":     return <AccessLog />;
+      case "registro": return <AccessLog />;
       case "estadisticas": return <Statistics />;
-      default:             return null;
+      default: return null;
     }
   };
 

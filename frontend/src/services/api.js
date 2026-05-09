@@ -9,7 +9,6 @@ async function request(path, options = {}) {
   return res.json();
 }
 
-// Logs
 export const logAccess = (parkingId, spotCode, action) =>
   request("/api/logs", {
     method: "POST", 
@@ -22,8 +21,7 @@ export const fetchLogs = (parkingId, limit = 100, offset = 0) => {
   return request(`/api/logs?${q}`);
 };
 
-// Stats
-export const fetchDailyStats = (days   = 7) => request(`/api/stats/daily?days=${days}`);
-export const fetchWeeklyStats = (weeks  = 4) => request(`/api/stats/weekly?weeks=${weeks}`);
+export const fetchDailyStats = (days = 7) => request(`/api/stats/daily?days=${days}`);
+export const fetchWeeklyStats = (weeks = 4) => request(`/api/stats/weekly?weeks=${weeks}`);
 export const fetchMonthlyStats = (months = 6) => request(`/api/stats/monthly?months=${months}`);
 export const fetchStatsSummary = () => request("/api/stats/summary");

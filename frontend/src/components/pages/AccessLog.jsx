@@ -3,8 +3,7 @@ import { fetchLogs } from "../../services/api";
 import { RefreshCw, Filter } from "lucide-react";
 
 const PARKING_LABELS = { 0: "Todos", 1: "Parking 1", 2: "Parking 2", 3: "Parking 3" };
-const ACTION_COLORS  = { entry: { bg: "#f0fdf4", text: "#16a34a", border: "rgba(22,163,74,0.3)",  label: "Entrada" },
-                          exit:  { bg: "#fef2f2", text: "#dc2626", border: "rgba(220,38,38,0.3)", label: "Salida"  } };
+const ACTION_COLORS  = { entry: { bg: "#f0fdf4", text: "#16a34a", border: "rgba(22,163,74,0.3)",  label: "Entrada" }, exit:  { bg: "#fef2f2", text: "#dc2626", border: "rgba(220,38,38,0.3)", label: "Salida"  } };
 
 function formatDate(iso) {
   const d = new Date(iso);
@@ -15,35 +14,34 @@ function formatTime(iso) {
   return d.toLocaleTimeString("es-MX", { hour12: false });
 }
 
-// Mock data for when backend is offline
 function generateMockLogs(count = 60) {
   const parkings = [1, 2, 3];
-  const zones    = { 1: ["A","B","C","D"], 2: ["E","F","G","H"], 3: ["I","J","K","L"] };
-  const actions  = ["entry", "exit"];
-  const logs     = [];
-  const now      = Date.now();
+  const zones = { 1: ["A","B","C","D"], 2: ["E","F","G","H"], 3: ["I","J","K","L"] };
+  const actions = ["entry", "exit"];
+  const logs = [];
+  const now = Date.now();
 
   for (let i = 0; i < count; i++) {
-    const pid    = parkings[Math.floor(Math.random() * 3)];
-    const zone   = zones[pid][Math.floor(Math.random() * 4)];
+    const pid = parkings[Math.floor(Math.random() * 3)];
+    const zone = zones[pid][Math.floor(Math.random() * 4)];
     const spotNo = String(Math.floor(Math.random() * 14) + 1).padStart(2, "0");
     logs.push({
-      id:           count - i,
-      parking_id:   pid,
+      id: count - i,
+      parking_id: pid,
       parking_name: `Parking ${pid}`,
-      spot_code:    `${zone}${spotNo}`,
-      action:       actions[Math.floor(Math.random() * 2)],
-      occurred_at:  new Date(now - i * 4 * 60 * 1000).toISOString(),
+      spot_code: `${zone}${spotNo}`,
+      action: actions[Math.floor(Math.random() * 2)],
+      occurred_at: new Date(now - i * 4 * 60 * 1000).toISOString(),
     });
   }
   return logs;
 }
 
 export default function AccessLog() {
-  const [logs,      setLogs]      = useState([]);
-  const [filter,    setFilter]    = useState(0);   // 0 = all
-  const [loading,   setLoading]   = useState(true);
-  const [useMock,   setUseMock]   = useState(false);
+  const [logs, setLogs] = useState([]);
+  const [filter, setFilter] = useState(0); 
+  const [loading, setLoading] = useState(true);
+  const [useMock, setUseMock] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -68,7 +66,6 @@ export default function AccessLog() {
   return (
     <div className="p-6 max-w-5xl mx-auto">
 
-      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold text-gray-900 tracking-tight">Registro de Accesos</h2>
@@ -85,14 +82,12 @@ export default function AccessLog() {
         </button>
       </div>
 
-      {/* Offline badge */}
       {useMock && (
         <div className="mb-4 px-4 py-2.5 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-700 font-medium">
           Backend no disponible — mostrando datos de demostración
         </div>
       )}
 
-      {/* Filtro */}
       <div className="flex items-center gap-2 mb-5">
         <Filter size={13} className="text-gray-400" />
         <span className="text-xs text-gray-400 mr-2">Filtrar:</span>
@@ -112,14 +107,12 @@ export default function AccessLog() {
         ))}
       </div>
 
-      {/* Table */}
       <div
         className="rounded-xl border border-gray-100 bg-white overflow-hidden"
         style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.05)" }}
       >
         <div style={{ height: 3, background: "#111111" }} />
 
-        {/* Table header */}
         <div
           className="grid text-[10px] font-semibold uppercase tracking-widest text-gray-400 px-5 py-3 border-b border-gray-50"
           style={{ gridTemplateColumns: "1fr 1fr 1fr 1.5fr 1fr" }}
@@ -131,7 +124,6 @@ export default function AccessLog() {
           <span>Hora</span>
         </div>
 
-        {/* Rows */}
         <div className="divide-y divide-gray-50">
           {loading ? (
             Array.from({ length: 8 }).map((_, i) => (

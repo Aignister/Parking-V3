@@ -1,24 +1,19 @@
-import { useParkingState } from "../../hooks/UseParkingState";
 import ParkingZone from "./ParkingZone";
 
-export default function ParkingMap({ parkingConfig }) {
-  const { isOccupied, toggleSpot } = useParkingState(parkingConfig);
-
+export default function ParkingMap({ parkingConfig, isOccupied, toggleSpot }) {
   return (
     <div className="p-6 max-w-5xl mx-auto">
 
-      {/* Header de parking */}
       <div className="mb-6">
         <h2 className="text-xl font-bold text-gray-900 tracking-tight">{parkingConfig.title}</h2>
         <p className="text-xs text-gray-400 uppercase tracking-widest mt-0.5">{parkingConfig.subtitle}</p>
       </div>
 
-      {/* Leyenda */}
       <div className="flex flex-wrap gap-4 mb-6">
         {[
-          { label: "Disponible",     border: "#d1d5db",             bg: "#f9fafb",  dot: "#d1d5db"  },
-          { label: "Ocupado",        border: "rgba(220,38,38,0.5)", bg: "#fef2f2",  dot: "#dc2626"  },
-          { label: "Discapacitados", border: "rgba(37,99,235,0.4)", bg: "#eff6ff",  dot: "#2563eb"  },
+          { label: "Disponible", border: "#d1d5db", bg: "#f9fafb", dot: "#d1d5db" },
+          { label: "Ocupado", border: "rgba(220,38,38,0.5)", bg: "#fef2f2",  dot: "#dc2626" },
+          { label: "Discapacitados", border: "rgba(37,99,235,0.4)", bg: "#eff6ff", dot: "#2563eb" },
         ].map((l) => (
           <div key={l.label} className="flex items-center gap-2">
             <div
@@ -35,7 +30,6 @@ export default function ParkingMap({ parkingConfig }) {
         </span>
       </div>
 
-      {/* Zonas */}
       <div className="flex flex-col gap-4">
         {parkingConfig.zones.map((zone) => (
           <ParkingZone

@@ -8,7 +8,6 @@ export default function ParkingSpot({ spot, isOccupied, onClick }) {
       className="relative group"
       style={{ width: 54, height: 72, background: "none", border: "none", padding: 0, cursor: "pointer" }}
     >
-      {/* Shell exterior */}
       <div
         className="absolute inset-0 rounded-md transition-all duration-200"
         style={{
@@ -25,7 +24,6 @@ export default function ParkingSpot({ spot, isOccupied, onClick }) {
         }}
       />
 
-      {/* Cuerpo interior */}
       <div
         className="absolute rounded transition-all duration-200 flex flex-col items-center justify-center gap-0.5"
         style={{
@@ -61,7 +59,6 @@ export default function ParkingSpot({ spot, isOccupied, onClick }) {
         </span>
       </div>
 
-      {/* Dot ocupado */}
       {isOccupied && (
         <div
           className="absolute"
@@ -76,7 +73,6 @@ export default function ParkingSpot({ spot, isOccupied, onClick }) {
         />
       )}
 
-      {/* Hover */}
       <div
         className="absolute inset-0 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-150"
         style={{ background: "rgba(0,0,0,0.04)", pointerEvents: "none" }}
