@@ -1,5 +1,16 @@
 # Backend
 
+## .env
+Por tema de practicas, este archivo no se debe de incluir dentro del repositorio, pero para tener la demostracion completa del codigo se incluyo
+La conexion es una conexion generica local a una base de datos de PostgreSQL
+
+        DB_HOST=localhost
+        DB_PORT=5432
+        DB_NAME=parking_db
+        DB_USER=postgres
+        DB_PASSWORD=12345
+        PORT=4000
+
 ## db/pool.js 
 Este crea y exporta una pool de conexiones de PostgreSQL reutilizable dentro de los todos los routers
 
